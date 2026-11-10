@@ -1,0 +1,197 @@
+name: release-windows
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Yayınlanacak sürüm etiketi (örn: v1.0.0). Boş bırakılırsa mevcut ref kullanılır."
+        required: false
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    name: build (${{ matrix.goarch }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - goos: windows
+            goarch: amd64
+            suffix: windows-amd64
+          - goos: windows
+            goarch: arm64
+            suffix: windows-arm64
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ inputs.tag }}" ]; then
+            ver="${{ inputs.tag }}"
+          elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            ver="${GITHUB_REF_NAME}"
+          else
+            ver="$(git describe --tags --always --dirty 2>/dev/null || echo dev)"
+          fi
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+
+      - name: Build binaries
+        shell: bash
+        env:
+          GOOS: ${{ matrix.goos }}
+          GOARCH: ${{ matrix.goarch }}
+          CGO_ENABLED: "0"
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          mkdir -p dist
+          go build -trimpath -ldflags "-s -w -X main.version=${VERSION}" -o dist/deepaicode2api.exe .
+          go build -trimpath -ldflags "-s -w -X main.version=${VERSION}" -o dist/probe.exe ./cmd/probe
+
+      - name: Package
+        shell: bash
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          SUFFIX: ${{ matrix.suffix }}
+        run: |
+          pkg="deepaicode2api-${VERSION}-${SUFFIX}"
+          mkdir -p "pkg/${pkg}"
+          cp dist/deepaicode2api.exe dist/probe.exe "pkg/${pkg}/"
+          cp README.md LICENSE .env.example "pkg/${pkg}/"
+          (cd pkg && zip -r "../${pkg}.zip" "${pkg}")
+          sha256sum "${pkg}.zip" > "${pkg}.zip.sha256"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deepaicode2api-${{ steps.version.outputs.version }}-${{ matrix.suffix }}
+          path: |
+            deepaicode2api-${{ steps.version.outputs.version }}-${{ matrix.suffix }}.zip
+            deepaicode2api-${{ steps.version.outputs.version }}-${{ matrix.suffix }}.zip.sha256
+          if-no-files-found: error
+
+  release:
+    name: create release
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve version
+        id: version
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] && [ -n "${{ inputs.tag }}" ]; then
+            ver="${{ inputs.tag }}"
+          elif [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            ver="${GITHUB_REF_NAME}"
+          else
+            ver="$(git describe --tags --always --dirty 2>/dev/null || echo dev)"
+          fi
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+          echo "tag=$ver" >> "$GITHUB_OUTPUT"
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+
+      - name: Generate release notes
+        id: notes
+        shell: bash
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          set -euo pipefail
+          prev=""
+          if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+            prev=$(git tag --sort=-version:refname | awk -v t="$TAG" '$0!=t {print; exit}')
+          else
+            prev=$(git describe --tags --abbrev=0 2>/dev/null || true)
+          fi
+
+          {
+            echo "## DeepAICode2API ${TAG} (Windows)"
+            echo
+            echo "### Sürüm notları"
+            if [ -n "$prev" ]; then
+              echo
+              echo "${prev} sürümünden bu yana yapılan değişiklikler:"
+              echo
+              git log --no-merges --pretty=format:"- %s (%h)" "${prev}..HEAD" || true
+            else
+              echo
+              echo "Bu sürümdeki değişiklikler:"
+              echo
+              git log --no-merges --pretty=format:"- %s (%h)" -n 50 || true
+            fi
+            echo
+            echo
+            echo "### İçerik"
+            echo "- \`deepaicode2api.exe\`: OpenAI / Anthropic uyumlu gateway"
+            echo "- \`probe.exe\`: upstream tanılama aracı"
+            echo "- \`README.md\`, \`LICENSE\`, \`.env.example\`"
+            echo
+            echo "### Kurulum (özet)"
+            echo "1. İlgili \`.zip\` dosyasını indirin ve çıkarın."
+            echo "2. \`.env.example\` dosyasını referans alarak yapılandırmanızı hazırlayın."
+            echo "3. \`deepaicode2api.exe\` uygulamasını çalıştırın (varsayılan: \`http://127.0.0.1:10087/\`)."
+            echo
+            echo "### Kontrol toplamları"
+            echo "Her arşiv için \`.sha256\` dosyası yayınlanmıştır."
+          } > RELEASE_NOTES.md
+
+          echo "Dosya hazır: RELEASE_NOTES.md"
+          sed -n '1,120p' RELEASE_NOTES.md
+
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ${{ steps.version.outputs.tag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          assets=(release-assets/*.zip release-assets/*.sha256)
+          if [ ${#assets[@]} -eq 0 ]; then
+            echo "Yayınlanacak asset bulunamadı" >&2
+            exit 1
+          fi
+
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            gh release edit "$TAG" --title "DeepAICode2API ${TAG}" --notes-file RELEASE_NOTES.md
+            gh release upload "$TAG" "${assets[@]}" --clobber
+          else
+            if [[ "$TAG" == refs/tags/* ]]; then
+              echo "Geçersiz etiket: $TAG" >&2
+              exit 1
+            fi
+            # workflow_dispatch ile mevcut olmayan bir tag verilirse önce tag oluşturulamaz;
+            # bu durumda release oluşturma etiketi hedef ref üzerinde yapılır.
+            if git rev-parse -q --verify "refs/tags/${TAG}" >/dev/null; then
+              gh release create "$TAG" --title "DeepAICode2API ${TAG}" --notes-file RELEASE_NOTES.md "${assets[@]}"
+            else
+              gh release create "$TAG" --target "${GITHUB_SHA}" --title "DeepAICode2API ${TAG}" --notes-file RELEASE_NOTES.md "${assets[@]}"
+            fi
+          fi

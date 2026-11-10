@@ -20,6 +20,7 @@ func sanitizedSettings(st store.Settings) map[string]any {
 		"log_keep":            st.LogKeep,
 		"cors_origin":         st.CORSOrigin,
 		"fallback_model":      st.FallbackModel,
+		"model_mask":          st.ModelMask,
 		"strict_model":        st.StrictModel,
 		"lane":                st.Lane,
 		"admin_password_set":  st.AdminPassword != "",
@@ -164,6 +165,12 @@ func (s *Server) handleAdminSettings(w http.ResponseWriter, r *http.Request) {
 		}
 		if body.FallbackModel != nil {
 			st.FallbackModel = strings.TrimSpace(*body.FallbackModel)
+		}
+		if body.ModelMask != nil {
+			st.ModelMask = strings.TrimSpace(*body.ModelMask)
+		}
+		if body.ModelMask != nil {
+			st.ModelMask = strings.TrimSpace(*body.ModelMask)
 		}
 		if body.StrictModel != nil {
 			st.StrictModel = *body.StrictModel

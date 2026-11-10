@@ -31,7 +31,9 @@ type Settings struct {
 	CORSOrigin     string            `json:"cors_origin"`
 	AdminPassword  string            `json:"admin_password"`
 	FallbackModel  string            `json:"fallback_model"`
-	// StrictModel 关闭「解析不到就回落」的行为：模型名不在目录里时返回 404，
+	// ModelMask 是模型名称掩码。当设置时，响应中的 model 字段将被此值替换。
+	// 这有助于隐藏实际使用的 upstream model 名称，展示一个统一的品牌名称。
+	ModelMask  string            `json:"model_mask"`
 	// 而不是静默换成默认模型。默认关闭，保持开箱即用。
 	StrictModel bool `json:"strict_model"`
 

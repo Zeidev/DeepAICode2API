@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="dark">
+<html lang="tr" data-theme="dark">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -696,20 +696,235 @@
     "更新于 {t} · 默认模型 {m}":"Updated {t} · default {m}"
   };
 
-  var lang = "zh";
+  // Turkish translations (Chinese -> Turkish)
+  var I18N_TR = {
+    "概览": "Genel Bakış",
+    "账号池": "Hesap Havuzu",
+    "密钥": "API Anahtarları",
+    "日志": "Günlükler",
+    "设置": "Ayarlar",
+    "控制台": "Kontrol Paneli",
+    "管理密码（如已设置）": "Yönetici şifresi (ayarlanmışsa)",
+    "记住": "Hatırla",
+    "刷新": "Yenile",
+    "号池健康、用量统计与上游模型目录": "Havuz durumu, kullanım istatistikleri ve üst model kataloğu",
+    "刷新模型目录": "Model kataloğunu yenile",
+    "上游账号、配额与调度状态": "Üst hesaplar, kota ve zamanlama durumu",
+    "导入本机桌面端": "Masaüstü kimlik bilgilerini içe aktar",
+    "浏览器登录": "Tarayıcı ile giriş",
+    "刷新全部配额": "Tüm kotaları yenile",
+    "网关对外签发的调用凭据，可绑定号池分组": "Ağ geçidinin dışa verdiği çağrı kimlik bilgileri; hesap havuzu grubuna bağlanabilir",
+    "只记录元信息，不落对话内容": "Yalnızca meta veriler kaydedilir, sohbet içeriği saklanmaz",
+    "清空": "Temizle",
+    "运行参数、模型别名与管理密码": "Çalışma parametreleri, model takma adları ve yönetici şifresi",
+    "保存设置": "Ayarları kaydet",
+    "重置统计": "İstatistikleri sıfırla",
+    "模型目录": "Model Kataloğu",
+    "手动添加": "Manuel ekle",
+    "账号列表": "Hesap listesi",
+    "任务参数": "Görev parametreleri",
+    "进度": "İlerleme",
+    "新建密钥": "Yeni anahtar",
+    "密钥列表": "Anahtar listesi",
+    "运行参数": "Çalışma parametreleri",
+    "添加 API Key": "API Anahtarı Ekle",
+    "创建密钥": "Anahtar oluştur",
+    "上一页": "Önceki",
+    "下一页": "Sonraki",
+    "取消": "İptal",
+    "打开 DeepAI 登录页": "DeepAI giriş sayfasını aç",
+    "配额": "Kota",
+    "停用": "Devre dışı bırak",
+    "启用": "Etkinleştir",
+    "清错": "Hataları temizle",
+    "删除": "Sil",
+    "操作": "İşlemler",
+    "配额刷新": "Kota yenileme",
+    "筛选": "Filtrele",
+    "重置": "Sıfırla",
+    "分组（留空=全部）": "Grup (boş = tümü)",
+    "全部状态": "Tüm durumlar",
+    "搜索邮箱 / 名称 / Key / 备注": "E-posta / ad / anahtar / not ara",
+    "全部端点": "Tüm uç noktalar",
+    "状态 ≥": "Durum ≥",
+    "关键字（错误 / 模型）": "Anahtar kelime (hata / model)",
+    "起始时间": "Başlangıç zamanı",
+    "补绑代理": "Proxy ata",
+    "重绑代理": "Proxy'yi yeniden ata",
+    "清除代理": "Proxy'yi temizle",
+    "分配机器指纹": "Makine kimliği ata",
+    "改分组": "Grubu değiştir",
+    "标记已验证": "Doğrulanmış olarak işaretle",
+    "新分组名": "Yeni grup adı",
+    "分组不能为空": "Grup boş olamaz",
+    "密钥绑定的分组（留空=全部）": "Anahtarın bağlı olduğu grup (boş = tümü)",
+    "该账号已绑定代理（{p}），从代理池重新分配？": "Bu hesapta zaten bir proxy ({p}) var; havuzdan yeniden atansın mı?",
+    "从代理池为 {name} 分配一个出口？": "{name} için proxy havuzundan bir çıkış atansın mı?",
+    "清除 {name} 的代理（回到直连）？": "{name} hesabının proxy'si temizlensin mi (doğrudan bağlantıya dön)?",
+    "为 {name} 生成独立机器指纹？（只补空值，不覆盖已有指纹）": "{name} için ayrı bir makine kimliği oluşturulsun mu? (yalnızca boş alanlar doldurulur, mevcut değerler korunur)",
+    "把 {name} 标记为邮箱已验证？": "{name} e-posta doğrulanmış olarak işaretlensin mi?",
+    "账号名称（可选）": "Hesap adı (isteğe bağlı)",
+    "API Key（DeepAI 账号密钥）": "API Anahtarı (DeepAI hesap anahtarı)",
+    "密钥备注（可选）": "Anahtar notu (isteğe bağlı)",
+    "分组（默认 default）": "Grup (varsayılan: default)",
+    "每页": "Sayfa başına",
+    "数量（1-50）": "Adet (1-50)",
+    "并发（1-5）": "Eşzamanlılık (1-5)",
+    "邮箱域名（可选）": "E-posta alan adı (isteğe bağlı)",
+    "邮箱后端": "E-posta arka ucu",
+    "号池分组": "Havuz grubu",
+    "指定邮箱（可选，数量必须为 1）": "Belirli e-posta (isteğe bağlı, adet 1 olmalı)",
+    "指定密码（可选）": "Belirli şifre (isteğe bağlı)",
+    "自动收信验证": "E-posta ile otomatik doğrulama",
+    "代理池（每行一个，http://user:pass@host:port；留空使用服务端 .env）": "Proxy havuzu (satır başına bir, http://user:pass@host:port; boş = sunucu .env)",
+    "请求超时（秒）": "İstek zaman aşımı (sn)",
+    "最大重试次数": "Maksimum yeniden deneme",
+    "日志保留条数": "Saklanacak günlük sayısı",
+    "CORS 允许来源（逗号分隔，留空=仅本机）": "İzin verilen CORS kaynakları (virgülle ayrılmış; boş = yalnızca yerel)",
+    "兜底模型（无法识别的模型名回落到它，留空=目录默认）": "Yedek model (tanınmayan adlar buna düşer; boş = katalog varsayılanı)",
+    "模型别名（JSON，如 {\"claude-sonnet-4\":\"glm-5.3-flash\"}）": "Model takma adları (JSON, örn. {\"claude-sonnet-4\":\"glm-5.3-flash\"})",
+    "管理密码（留空则保持；设置后管理接口必须携带）": "Yönetici şifresi (boş = mevcut kalsın; ayarlanırsa yönetim arayüzü şifre ister)",
+    "不修改请留空": "Değiştirmemek için boş bırakın",
+    "留空使用配置域名": "Yapılandırılmış alan adını kullanmak için boş bırakın",
+    "留空自动创建临时邮箱": "Geçici e-posta otomatik oluşturmak için boş bırakın",
+    "留空自动生成": "Otomatik oluşturmak için boş bırakın",
+    "关闭浏览器指纹库（使用固定 UA）": "Tarayıcı parmak izi kütüphanesini kapat (sabit UA kullan)",
+    "自动": "Otomatik",
+    "静态域名（无收件箱）": "Statik alan adı (gelen kutusu yok)",
+    "固定邮箱": "Sabit e-posta",
+    "开启（验证后 +200 Theos）": "Açık (doğrulamadan sonra +200 Theos)",
+    "关闭": "Kapalı",
+    "最近 50": "Son 50",
+    "最近 200": "Son 200",
+    "全部": "Tümü",
+    "账号": "Hesap",
+    "分组": "Grup",
+    "来源": "Kaynak",
+    "套餐 / 验证": "Plan / Doğrulama",
+    "状态": "Durum",
+    "失败": "Hatalar",
+    "最近使用": "Son kullanım",
+    "ID": "ID",
+    "名称": "Ad",
+    "计费": "Faturalandırma",
+    "Theos/次": "Theos/istek",
+    "上下文": "Bağlam",
+    "最大输出": "Maks. çıktı",
+    "端点": "Uç nokta",
+    "输入": "Girdi",
+    "备注": "Not",
+    "请求数": "İstek sayısı",
+    "创建时间": "Oluşturulma",
+    "时间": "Zaman",
+    "模型": "Model",
+    "流式": "Akış",
+    "耗时": "Süre",
+    "字符": "Karakter",
+    "Token": "Token",
+    "成本": "Maliyet",
+    "错误": "Hata",
+    "邮箱": "E-posta",
+    "阶段": "Aşama",
+    "代理 / 指纹": "Proxy / Parmak izi",
+    "未探测": "sorgulanmadı",
+    "已停用": "devre dışı",
+    "已验证": "doğrulanmış",
+    "未验证": "doğrulanmamış",
+    "是": "evet",
+    "否": "hayır",
+    "无": "yok",
+    "推理": "akıl yürütme",
+    "本页无数据": "Bu sayfada veri yok",
+    "暂无账号，点击「导入本机桌面端」或「浏览器登录」": "Henüz hesap yok — «Masaüstü kimlik bilgilerini içe aktar» veya «Tarayıcı ile giriş» kullanın",
+    "暂无密钥（未签发时 /v1 允许无密钥调用）": "Henüz anahtar yok (anahtar verilmediyse /v1 anahtarsız çağrılara izin verir)",
+    "暂无日志": "Günlük yok",
+    "暂无记录": "Kayıt yok",
+    "等待浏览器完成登录…": "Tarayıcıda girişin tamamlanması bekleniyor…",
+    "登录页会在新标签页打开；如果没有自动打开，请点击下面的按钮。": "Giriş sayfası yeni sekmede açılacak; otomatik açılmazsa aşağıdaki düğmeye tıklayın.",
+    "Docker / 远程部署时浏览器回调打不开（127.0.0.1 指的是你自己的机器）：把地址栏里的完整 URL 粘到下面，由网关完成兑换。": "Docker veya uzak kurulumda tarayıcı geri çağrısı açılamaz (127.0.0.1 sizin makinenizi gösterir): adres çubuğundaki tam URL'yi aşağıya yapıştırın, ağ geçidi takası tamamlasın.",
+    "粘贴回调 URL 完成登录": "Yapıştırılan geri çağrı URL'si ile girişi tamamla",
+    "先粘贴回调 URL": "Önce geri çağrı URL'sini yapıştırın",
+    "正在用粘贴的回调兑换…": "Yapıştırılan geri çağrı ile takas yapılıyor…",
+    "复制登录链接": "Giriş bağlantısını kopyala",
+    "登录链接在发起后生成": "Giriş bağlantısı başlatıldıktan sonra oluşturulur",
+    "登录链接已复制": "Giriş bağlantısı kopyalandı",
+    "先发起一次登录，再复制链接": "Önce bir giriş başlatın, sonra bağlantıyı kopyalayın",
+    "复制失败，已选中链接，请按 Ctrl+C": "Kopyalama başarısız; bağlantı seçili, Ctrl+C ile kopyalayın",
+    "链接含一次性 state，可以在另一个浏览器 / 机器上打开（同网络内直接访问网关地址即可）。": "Bağlantı tek kullanımlık bir state içerir; bu ağ geçidine erişebilen başka bir tarayıcı/makinede açılabilir.",
+    "凭据已脱敏展示；完整 API Key 仅存于本机状态文件（权限 0600）。": "Kimlik bilgileri maskelenmiştir; tam API anahtarı yalnızca yerel durum dosyasında saklanır (izin: 0600).",
+    "目录由上游": "Katalog üst kaynaktan",
+    "下发；计费为": " alınır; faturalandırması ",
+    "的模型每天有免费 Theos 额度。": " olan modeller günlük ücretsiz Theos kotası alır.",
+    "密钥已脱敏。完整密钥只在创建时返回一次，请立即保存。": "Anahtarlar maskelenmiştir. Tam anahtar yalnızca oluşturulurken bir kez gösterilir — hemen kaydedin.",
+    "未签发任何密钥时，": "Hiç anahtar verilmediğinde, ",
+    "允许无密钥调用。": " anahtarsız çağrılara izin verilir.",
+    "日志落在": "Günlükler şuraya yazılır: ",
+    "超过": " aşıldığında ",
+    "自动轮转；支持": " otomatik döndürülür; ",
+    "过滤。": " filtreleri desteklenir.",
+    "操作成功": "İşlem başarılı",
+    "已清空": "Temizlendi",
+    "已重置": "Sıfırlandı",
+    "已记住管理密码（仅本次会话）": "Yönetici şifresi hatırlandı (yalnızca bu oturum)",
+    "请填写 API Key": "Lütfen bir API anahtarı girin",
+    "正在查询上游配额…": "Üst kota sorgulanıyor…",
+    "正在从上游刷新模型目录…": "Üst model kataloğu yenileniyor…",
+    "模型目录已更新": "Model kataloğu güncellendi",
+    "模型别名不是合法 JSON": "Model takma adları geçerli bir JSON değil",
+    "设置已保存": "Ayarlar kaydedildi",
+    "已创建密钥（仅显示一次）：": "Anahtar oluşturuldu (yalnızca bir kez gösterilir): ",
+    "确定清空全部日志？": "Tüm günlükler temizlensin mi?",
+    "确定重置统计？": "İstatistikler sıfırlansın mı?",
+    "确定删除该密钥？": "Bu anahtar silinsin mi?",
+    "登录会话已过期，请重新发起。": "Giriş oturumunun süresi doldu, lütfen yeniden başlatın.",
+    "账号 {a}/{b} 就绪 · 模型 {c}": "{a}/{b} hesap hazır · {c} model",
+    "机器指纹 {m} · 默认 {d}": "Makine parmak izi {m} · varsayılan {d}",
+    "共 {n} 个账号": "Toplam {n} hesap",
+    "共 {n} 个账号 · 第 {p}/{t} 页 · 显示 {a}-{b}": "Toplam {n} hesap · sayfa {p}/{t} · {a}-{b} arası gösteriliyor",
+    "单号平均 {mean}s · p50 {p50}s · p95 {p95}s · 入池 {ok}/{n}": "ortalama {mean}s · p50 {p50}s · p95 {p95}s · havuza alınan {ok}/{n}",
+    "确定删除账号 {name}？": "{name} hesabı silinsin mi?",
+    "不可用": "kullanılamıyor",
+    "不可达": "erişilemiyor",
+    "加载失败：": "Yükleme başarısız: ",
+    "失败：": "Başarısız: ",
+    "日志加载失败：": "Günlükler yüklenemedi: ",
+    "查询失败：": "Sorgu başarısız: ",
+    "刷新失败：": "Yenileme başarısız: ",
+    "创建失败：": "Oluşturma başarısız: ",
+    "保存失败：": "Kaydetme başarısız: ",
+    "配额刷新完成：": "Kota yenileme tamamlandı: ",
+    "请在右上角填写管理密码": "Lütfen sağ üstten yönetici şifresini girin",
+    "登录成功：": "Giriş başarılı: ",
+    "运行中…": "Çalışıyor…",
+    "深色": "Koyu",
+    "浅色": "Açık",
+    "切换白天 / 黑夜模式": "Açık/Koyu temayı değiştir",
+    "总请求": "Toplam istek",
+    "失败请求": "Başarısız istek",
+    "输出字符": "Çıktı karakteri",
+    "Token 入 / 出": "Token giriş / çıkış",
+    "上游成本": "Üst maliyet",
+    "账号（就绪/总）": "Hesaplar (hazır/toplam)",
+    "统计自": "İstatistik başlangıcı",
+    "更新于 {t} · 默认模型 {m}": "Güncelleme: {t} · varsayılan model: {m}"
+  };
+
+  var lang = "tr";  // Default to Turkish
   try {
     // ?lang=en 优先（便于分享/截图固定语言），其次本地偏好，最后跟随浏览器。
-    var qs = (location.search.match(/[?&]lang=(en|zh)/) || [])[1];
+    var qs = (location.search.match(/[?&]lang=(en|zh|tr)/) || [])[1];
     var savedLang = localStorage.getItem("deepaicode2api_lang");
     if (qs) lang = qs;
-    else if (savedLang === "en" || savedLang === "zh") lang = savedLang;
-    else if ((navigator.language || "").toLowerCase().indexOf("zh") !== 0) lang = "en";
+    else if (savedLang === "en" || savedLang === "zh" || savedLang === "tr") lang = savedLang;
+    else if ((navigator.language || "").toLowerCase().indexOf("tr") !== -1) lang = "tr";
+    else lang = "tr";  // Default to Turkish
   } catch { /* localStorage 不可用时按语言环境判断 */ }
 
   // tr 只做精确匹配（渲染后的整段文本）。
   function tr(s){
-    if (lang !== "en") return s;
-    return I18N_EN[s] !== undefined ? I18N_EN[s] : s;
+    if (lang === "en") return I18N_EN[s] !== undefined ? I18N_EN[s] : s;
+    if (lang === "tr") return I18N_TR[s] !== undefined ? I18N_TR[s] : s;
+    return s;  // Keep original for non-English (zh, tr)
   }
 
   // t 支持 {name} 插值，用于拼接句子。
@@ -762,8 +977,8 @@
     translateDom(document.body);
     translateAttrs(document.body);
     var b = $("#lang");
-    if (b) b.textContent = lang === "en" ? "中" : "EN";
-    document.documentElement.setAttribute("lang", lang === "en" ? "en" : "zh-CN");
+    if (b) b.textContent = {"en":"EN","tr":"TR","zh":"中"}[lang];
+    document.documentElement.setAttribute("lang", {"en":"en","tr":"tr-TR","zh":"zh-CN"}[lang]);
   }
 
   /* ================= 行内操作菜单构造 ================= */
@@ -1644,7 +1859,10 @@
 
   // --- 语言切换 ---
   $("#lang").onclick = function(){
-    lang = lang === "en" ? "zh" : "en";
+    // Cycle: en -> tr -> zh -> en
+    if (lang === "en") lang = "tr";
+    else if (lang === "tr") lang = "zh";
+    else lang = "en";
     try { localStorage.setItem("deepaicode2api_lang", lang); } catch { /* ignore */ }
     applyLang();
     refresh();

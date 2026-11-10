@@ -95,7 +95,7 @@ func (s *Server) passthroughResponses(w http.ResponseWriter, r *http.Request, pa
 			writeRawJSON(w, http.StatusOK, rawResp)
 			return
 		}
-		rewriteResponsesModel(out, rl.model)
+		rewriteResponsesModel(out, s.maskedModel(rl.model.ID))
 		usage := parseUsage(out["usage"])
 		outLen := responsesTextLen(out)
 		encoded, _ := json.Marshal(out)
@@ -166,7 +166,9 @@ func (s *Server) blockingResponsesAsChat(w http.ResponseWriter, r *http.Request,
 		writeUpstreamErr(w, err)
 		return
 	}
-	respObj := chatToResponsesObject(out, rl.model)
+	// Use masked model name
+	maskedModel := s.maskedModel(rl.model.ID)
+	respObj := chatToResponsesObject(out, maskedModel)
 	usage := parseUsage(out["usage"])
 	outLen := responsesTextLen(respObj)
 

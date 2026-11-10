@@ -90,6 +90,15 @@ func New(st *store.Store) *Server {
 	return s
 }
 
+// maskedModel returns the model name to expose to clients.
+// If ModelMask is set, it returns the mask; otherwise returns the resolved model ID.
+func (s *Server) maskedModel(resolvedID string) string {
+	if mask := s.Store.Settings().ModelMask; mask != "" {
+		return mask
+	}
+	return resolvedID
+}
+
 // Handler 返回完整路由。
 func (s *Server) Handler() http.Handler {
 	mux := http.NewServeMux()

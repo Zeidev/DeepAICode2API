@@ -75,8 +75,11 @@ func (s *Server) handleChatCompletions(w http.ResponseWriter, r *http.Request) {
 	}
 	defer resp.Body.Close()
 
+	// Get masked model name for response
+	maskedModel := s.maskedModel(model.ID)
+
 	if stream {
-		s.streamChat(w, resp.Body, rl)
+		s.streamChat(w, resp.Body, rl, maskedModel)
 		return
 	}
 
@@ -96,7 +99,7 @@ func (s *Server) handleChatCompletions(w http.ResponseWriter, r *http.Request) {
 		writeErr(w, http.StatusBadGateway, "上游响应不是合法 JSON", "upstream_error")
 		return
 	}
-	transformChatResponse(out, model.ID)
+	transformChatResponse(out, maskedModel)
 	usage := parseUsage(out["usage"])
 	outLen := chatTextLen(out)
 
@@ -157,7 +160,7 @@ func addReasoningContent(obj map[string]any) {
 }
 
 // streamChat 以 OpenAI SSE 格式流式转发。
-func (s *Server) streamChat(w http.ResponseWriter, body io.Reader, rl reqLog) {
+func (s *Server) streamChat(w http.ResponseWriter, body io.Reader, rl reqLog, maskedModel string) {
 	sw := newSSEWriter(w)
 
 	var (
@@ -187,7 +190,7 @@ func (s *Server) streamChat(w http.ResponseWriter, body io.Reader, rl reqLog) {
 			sw.flush()
 			return true
 		}
-		transformChatChunk(f.Object, rl.model)
+		transformChatChunk(f.Object, maskedModel)
 		if u := parseUsage(f.Object["usage"]); u.TotalTokens > 0 || u.Cost > 0 {
 			usage = u
 		}

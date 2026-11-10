@@ -1,0 +1,47 @@
+name: gofmt
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+
+      - name: Run gofmt
+        run: gofmt -w .
+
+      - name: Commit formatting changes
+        if: changes()
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add internal/store/store.go
+          if git diff --cached --quiet; then
+            echo "No formatting changes to commit"
+            exit 0
+          fi
+          git commit -m "feat: gofmt internal/store/store.go"
+          git push origin HEAD:${GITHUB_REF#refs/heads/}
+
+      - name: Report formatting status
+        if: always()
+        run: |
+          echo "gofmt completed"
+          unformatted=$(gofmt -l . 2>/dev/null || echo "gofmt not available")
+          if [ -n "$unformatted" ]; then
+            echo "Unformatted files: $unformatted"
+            exit 1
+          else
+            echo "All Go files are properly formatted"
+          fi

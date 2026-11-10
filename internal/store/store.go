@@ -33,7 +33,7 @@ type Settings struct {
 	FallbackModel  string            `json:"fallback_model"`
 	// ModelMask 是模型名称掩码。当设置时，响应中的 model 字段将被此值替换。
 	// 这有助于隐藏实际使用的 upstream model 名称，展示一个统一的品牌名称。
-	ModelMask  string            `json:"model_mask"`
+	ModelMask string `json:"model_mask"`
 	// 而不是静默换成默认模型。默认关闭，保持开箱即用。
 	StrictModel bool `json:"strict_model"`
 

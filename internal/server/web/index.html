@@ -518,6 +518,7 @@
             <div><label>日志保留条数</label><input id="sLogKeep" type="number" min="1"></div>
             <div><label>CORS 允许来源（逗号分隔，留空=仅本机）</label><input id="sCors" placeholder="http://192.168.1.10:8080"></div>
             <div><label>兜底模型（无法识别的模型名回落到它，留空=目录默认）</label><input id="sFallback" placeholder="glm-5.3-flash"></div>
+            <div><label>模型名称掩码（留空=显示实际模型名；设置后所有响应中的 model 字段将替换为此值）</label><input id="sModelMask" placeholder="例如：claude-sonnet-4-20250514"></div>
             <div>
               <label>严格模型模式</label>
               <label style="display:flex;gap:7px;align-items:center;margin-top:6px;text-transform:none">
@@ -1477,6 +1478,7 @@
     $("#sLogKeep").value = s.log_keep || "";
     $("#sCors").value = s.cors_origin || "";
     $("#sFallback").value = s.fallback_model || "";
+    $("#sModelMask").value = s.model_mask || "";
     $("#sStrict").checked = !!s.strict_model;
     $("#sAliases").value = JSON.stringify(s.model_aliases || {}, null, 2);
     $("#sPw").placeholder = s.admin_password_set ? "已设置，留空则不修改" : "未设置";
@@ -1645,6 +1647,7 @@
       log_keep: parseInt($("#sLogKeep").value, 10) || 0,
       cors_origin: $("#sCors").value.trim(),
       fallback_model: $("#sFallback").value.trim(),
+      model_mask: $("#sModelMask").value.trim(),
       strict_model: $("#sStrict").checked
     };
     var np = $("#sPw").value;

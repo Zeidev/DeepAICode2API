@@ -102,7 +102,8 @@ func (s *Server) blockingAnthropic(w http.ResponseWriter, r *http.Request, paylo
 		return
 	}
 	usage := parseUsage(out["usage"])
-	msg := chatToAnthropicMessage(out, rl.model)
+	maskedModel := s.maskedModel(rl.model)
+	msg := chatToAnthropicMessage(out, maskedModel)
 	outLen := anthropicTextLen(msg)
 
 	rl.done(outLen, usage, nil)
@@ -137,10 +138,11 @@ func (s *Server) streamAnthropic(w http.ResponseWriter, r *http.Request, payload
 		}
 	}
 
+	maskedModel := s.maskedModel(rl.model)
 	send("message_start", map[string]any{
 		"type": "message_start",
 		"message": map[string]any{
-			"id": msgID, "type": "message", "role": "assistant", "model": rl.model,
+			"id": msgID, "type": "message", "role": "assistant", "model": maskedModel,
 			"content": []any{}, "stop_reason": nil, "stop_sequence": nil,
 			"usage": map[string]any{"input_tokens": 0, "output_tokens": 0},
 		},

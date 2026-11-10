@@ -138,6 +138,7 @@ func (s *Server) handleAdminSettings(w http.ResponseWriter, r *http.Request) {
 		CORSOrigin     *string           `json:"cors_origin"`
 		AdminPassword  *string           `json:"admin_password"`
 		FallbackModel  *string           `json:"fallback_model"`
+		ModelMask      *string           `json:"model_mask"`
 		StrictModel    *bool             `json:"strict_model"`
 	}
 	if err := json.NewDecoder(http.MaxBytesReader(w, r.Body, 1<<20)).Decode(&body); err != nil {
@@ -165,9 +166,6 @@ func (s *Server) handleAdminSettings(w http.ResponseWriter, r *http.Request) {
 		}
 		if body.FallbackModel != nil {
 			st.FallbackModel = strings.TrimSpace(*body.FallbackModel)
-		}
-		if body.ModelMask != nil {
-			st.ModelMask = strings.TrimSpace(*body.ModelMask)
 		}
 		if body.ModelMask != nil {
 			st.ModelMask = strings.TrimSpace(*body.ModelMask)

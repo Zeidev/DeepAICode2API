@@ -95,7 +95,7 @@ func (s *Server) passthroughResponses(w http.ResponseWriter, r *http.Request, pa
 			writeRawJSON(w, http.StatusOK, rawResp)
 			return
 		}
-		rewriteResponsesModel(out, s.maskedModel(rl.model.ID))
+		rewriteResponsesModel(out, s.maskedModel(rl.model))
 		usage := parseUsage(out["usage"])
 		outLen := responsesTextLen(out)
 		encoded, _ := json.Marshal(out)
@@ -127,7 +127,7 @@ func (s *Server) passthroughResponses(w http.ResponseWriter, r *http.Request, pa
 			sw.flush()
 			return true
 		}
-		rewriteResponsesModel(obj, rl.model)
+		rewriteResponsesModel(obj, s.maskedModel(rl.model))
 		if respObj, ok := obj["response"].(map[string]any); ok {
 			if u := parseUsage(respObj["usage"]); u.TotalTokens > 0 || u.Cost > 0 {
 				usage = u
@@ -167,7 +167,7 @@ func (s *Server) blockingResponsesAsChat(w http.ResponseWriter, r *http.Request,
 		return
 	}
 	// Use masked model name
-	maskedModel := s.maskedModel(rl.model.ID)
+	maskedModel := s.maskedModel(rl.model)
 	respObj := chatToResponsesObject(out, maskedModel)
 	usage := parseUsage(out["usage"])
 	outLen := responsesTextLen(respObj)
@@ -196,7 +196,8 @@ func (s *Server) streamResponsesAsChat(w http.ResponseWriter, r *http.Request, c
 	defer resp.Body.Close()
 
 	sw := newSSEWriter(w)
-	gen := newResponsesStreamGen(sw, rl.model)
+	maskedModel := s.maskedModel(rl.model)
+	gen := newResponsesStreamGen(sw, maskedModel)
 	gen.created()
 
 	var (
